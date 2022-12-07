@@ -1,9 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import s from './Contacts.module.css';
 import Contact from 'components/Contact/Contact';
 
-const Contacts = ({ onContactDelete, contacts }) => {
+import { deleteContact } from 'redux/contactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from 'redux/selectore';
+
+const Contacts = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
+  const onContactDelete = id => {
+    dispatch(deleteContact(id));
+  };
+
   return contacts.length ? (
     <ul className={s.contactsList}>
       {contacts.map(contact => (
@@ -15,18 +25,6 @@ const Contacts = ({ onContactDelete, contacts }) => {
   ) : (
     'There are no contacts'
   );
-};
-
-Contacts.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
-
-  onContactDelete: PropTypes.func.isRequired,
 };
 
 export default Contacts;
